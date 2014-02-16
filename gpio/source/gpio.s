@@ -12,14 +12,6 @@
 * each pin has 8 functions (0-7)
 */
 
-/*
-GPIO Timer - at address 0x20003000
-20003000 - Control register 	- 	4 bytes
-20003004 - Counter 				-	8 bytes
-2000300C - Compare 0 			-	4 bytes
-20003010 - Compare 1 			-	4 bytes
-20003014 - Compare 2 			-	4 bytes
-20003018 - Compare 3 			-	4 bytes
 
 /* pc - program counter - address of next instruction to be executed */
 /* lr - address of instruction to be executed after a function returns */

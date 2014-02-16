@@ -38,42 +38,38 @@ bl SetGpioFunction
 .unreq pinFunc
 
 
+ptrn .req r4
+ldr ptrn,=pattern
+ldr ptrn,[ptrn]
+seq .req r5
+mov seq,#0
+
 /* NEW
-* Use our new SetGpio function to set GPIO 16 to low, causing the LED to turn 
-* on.
+* Use our new SetGpio function to set GPIO 16 based on the current bit in
+* the pattern.
 */
 loop$:
-pinNum .req r0
-pinVal .req r1
-mov pinNum,#16
-mov pinVal,#0
+mov r0,#16
+mov r1,#1
+lsl r1,seq
+and r1,ptrn
 bl SetGpio
-.unreq pinNum
-.unreq pinVal
 
 waitTime .req r0
 ldr waitTime,=0xF4240 /* 1 second */
 bl Wait
 .unreq waitTime
 
-/* NEW
-* Use our new SetGpio function to set GPIO 16 to high, causing the LED to turn 
-* on.
-*/
-pinNum .req r0
-pinVal .req r1
-mov pinNum,#16
-mov pinVal,#1
-bl SetGpio
-.unreq pinNum
-.unreq pinVal
-
-waitTime .req r0
-ldr waitTime,=0xF4240 /* 1 second */
-bl Wait
-.unreq waitTime
-
-/*
-* Loop over this process forevermore
-*/
+add seq,#1
+and seq,#0b11111
 b loop$
+
+.section .data
+/*
+*.align num ensures the address of the next line is a multiple of 2num .
+*/
+.align 2
+pattern:
+.int 0b11111111101010100010001000101010
+
+
